@@ -54,6 +54,8 @@ vidgate publish stats <postId> --json
 
 返回 `videoViews/likes/comments/shares/reach` 等（`stats` 可得性取决于授权 scope；无数据时 stats 为 null）。itemId 即 postId；查不到说明视频未发布成功或不属于你（1005）。
 
+- 时机坑：postId 官方生成有约 3 分钟延迟——`publish records` 里 `postId=null` 期间查 stats 必 1005，属预期；等 status 轮询拿到 postId 再查。
+
 ## 常见失败模式
 
 - 时长/帧率/分辨率不达标 → publish_failed，reason 会指明

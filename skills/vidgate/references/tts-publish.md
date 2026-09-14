@@ -10,6 +10,8 @@ seats list（拿 creatorUserOpenId）→ videos upload --library tts（拿一次
 
 全程只用官方返回的 id（fileId / creatorUserOpenId / productId / taskId），平台无自造 id。
 
+> TTS 上传响应的 `videoUrl` 恒为 `null`（fileId 无 URL 概念）——以 `code=0` 判成功，勿以 videoUrl 非空判成功。
+
 ## 规则（官方校验，违反必失败）
 
 这些规则**由官方在发布时校验**（平台不预检，违规透传官方报错 `3001`，message 带官方原因）：
@@ -46,6 +48,7 @@ seats list（拿 creatorUserOpenId）→ videos upload --library tts（拿一次
 ## 商品拉取（products query）分页语义
 
 - `--type shop`（店铺商品）/ `--type showcase`（橱窗）；**不传 = 两组都返回**，但两组游标各自独立——**翻页必须在单类型下进行**（带 `--type` + 该组的 `nextPageToken`）。
+- 翻页只认 `nextPageToken`（为 null = 没有下一页）；**勿按 `totalCount` 推算页数**。
 - 数据有 60s 短缓存；`--fresh` 穿透缓存直取官方。
 - 选品硬要求：`reviewStatus=APPROVED` 且有货；商品需与视频内容相关（官方会校验相关性）。
 
@@ -89,6 +92,8 @@ vidgate music search --account-id <id> --keyword love --json
 ```
 
 - ⚠️ **传 `--music-id` 会完全覆盖视频原声（含口播人声），不是混音**。口播讲解类视频不要配 BGM。
+- 分页语义（官方怪癖，实测）：`nextPageToken` 是**数值 offset**（按 page-size 递增），翻页原值回传即可，别当不透明游标缓存；`searchId` 每次调用都变，一次翻页链必须在同一次搜索会话内连续传递（跨调用不可复用）。
+- 带小 `--page-size` 的**首调用可能返回空数组但 `hasMore=true`**（官方行为，非故障）：别误判无结果，带返回的 `nextPageToken`+`searchId` 再查一次即得数据。
 
 ## publish tts 字段与官方对照（v202607）
 
@@ -109,5 +114,6 @@ vidgate music search --account-id <id> --keyword love --json
 ## 状态轮询
 
 - `publish status --tts --video-id <发布响应的 videoId>`（官方 video_id；无需 accountId，平台反查）。
+- ⚠️ **`publish records` 里的 `videoId` 是平台视频库记录 ID（对应 videos 库），不能用于 status 查询（必 1005）**。记录里用于查状态的字段是 `shareId`（TTS 记录的 `shareId` = 官方 video_id）。最稳口径：以 `publish tts` 即时响应的 `videoId` 为准并保存。
 - 提交后立即可查；5–10s 一次；终态 `publish_complete` / `publish_failed`（失败原因读 `failReason`）；`beervid_error` = 平台侧调用失败，可重试。
 - TTS 无 webhook，轮询是唯一终态路径。

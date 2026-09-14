@@ -3,7 +3,7 @@ name: vidgate
 description: 通过 vidgate CLI 发布视频到 TikTok / TikTok Shop（挂车带货）、查询坐席与商品、跟踪发布状态、TTS 预审。Use when the user wants to upload or publish videos to TikTok / TikTok Shop, query seats or shoppable products, run TTS precheck, upload covers, search music, or check publish status via the vidgate API platform.
 metadata:
   author: beervid
-  version: "0.3.1"
+  version: "0.4.0"
 ---
 
 # vidgate 视频发布
@@ -19,7 +19,7 @@ vidgate version                                # 核对能力版本
 ```
 
 - 无凭据 → 提示用户提供 API Token（控制台「API Keys」页创建）：`vidgate auth login --token <t>`，或 `export VIDGATE_API_TOKEN=vg_live_...`。
-- **能力版本门**：0.0.x 仅只读命令（auth / seats / videos list,get / products query）；写链路（videos upload / videos delete / publish / precheck / photos / music）需 CLI **≥ 1.4.0**。版本不够就提示用户 `npm update -g @vidgate/cli`。
+- **能力版本门**：稳定版 **≥ 1.4.0** 具备全部命令（只读 + 写链路 + `skill install`）；beta 通道自 `0.0.2-beta` 起同样全量。拿不准就以 `vidgate --help` 输出为准（含 `videos upload` 即具备写能力）；版本过旧就提示用户 `npm update -g @vidgate/cli`。
 
 ## 1. 凭据纪律（安全红线）
 

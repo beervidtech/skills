@@ -20,6 +20,8 @@
 
 视频列表（游标分页）
 
+- ⚠ 注意：已删除（软删）的记录仍保留在列表中，以 status=expired 标识（审计留痕）；判断可用性看 status，不要以「列表里还有没有」判断删除是否生效
+
 ### GET /v1/videos/{id}
 
 视频详情
@@ -31,6 +33,7 @@
 删除视频（软删=立即失效）
 
 - 必填参数：id（path）
+- ⚠ 软删语义：记录标记 status=expired 后——① 发布/预审等消耗路径立即拒绝（2005），「立即失效」指此；② 删除后记录仍可查：列表/详情继续返回（status=expired，videoUrl/expiresAt 字段保留原值，审计留痕），属预期行为，勿以「列表消失」判断删除成功
 
 ## Seats
 
@@ -74,12 +77,16 @@ TT 发布状态刷新（每次调用即拉取官方最新状态并同步到你�
 
 发布记录分页（只读快照，不在此刷新状态；最新状态请用 status 接口）
 
+- ⚠ 字段口径必须分清：videoId 是平台视频库记录 ID（对应 GET /v1/videos/{id}，只能用于视频库管理）；官方句柄必须看 shareId 字段——TT 记录=官方 share_id（status 接口的 shareId 入参），TTS 记录=官方 video_id（status 接口的 videoId 入参）
+- ⚠ 勿拿 records 的 videoId 去查发布状态（必 1005）
+
 ### GET /v1/publish/stats
 
 TT 视频数据回收（views/likes/comments/shares…）
 
 - 必填参数：itemId（query）
 - ⚠ itemId 反查你的发布记录做归属校验并取发布账号；查无（不是你的/未发布成功）→ 1005
+- ⚠ 注意：postId 由官方数据处理生成，publish_complete 后可能延迟约 3 分钟——记录 postId=null 期间查本接口必 1005，属预期，等 status 轮询拿到 postId 再查
 
 ## TikTok Shop 挂车
 
@@ -102,6 +109,7 @@ TTS 发布状态刷新（每次调用即拉取官方最新状态并同步到你�
 - 必填参数：videoId（query）
 - ⚠ 官方无 webhook，轮询是唯一终态路径
 - ⚠ videoId = POST /v1/publish/tts 响应的 videoId（即官方 Post Shoppable Video 返回的 video_id）——提交发布后立即可查，无需等待
+- ⚠ 发布记录（GET /v1/publish/records）里的 shareId 字段即此官方 video_id，可用于本接口；records 的 videoId 是平台视频库 ID，勿用于本接口（必 1005）
 - ⚠ accountId 无需提供：平台按 videoId 反查你的发布记录自动带出（查无/非本人 → 1005；TT 记录 → 2001）
 - ⚠ 建议每 5–10s 轮询、最多约 30 次；终态 publish_complete / publish_failed 即停
 
@@ -134,4 +142,4 @@ TTS 预审结果查询（按官方 taskId）
 TTS 电商授权音乐搜索（BGM）
 
 - 必填 body：accountId、keyword
-- ⚠ 翻页从第 2 页起必须带首页返回的 searchId
+- ⚠ 分页语义（官方怪癖，逐条实测）：① nextPageToken 是数值 offset（按 pageSize 递增），翻页原值回传，勿当不透明游标缓存；② 第 2 页起必须同时带 searchId + pageToken；③ searchId 每次调用都变（一次翻页链=同一会话内连续传递，跨调用不可复用）；④ 带小 pageSize 的首调用可能返回空数组但 hasMore=true——别误判无结果，带返回的 nextPageToken+searchId 再查一次即得数据（官方行为，非故障）

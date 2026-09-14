@@ -6,9 +6,9 @@
 |---|---|
 | 坐席（Seat） | 1 个 TikTok 账号 = 1 坐席（计费单位，按坐席×月）。一个坐席可绑同一账号的两种能力：TT 发视频 + TTS 挂车 |
 | API Token | `vg_live_` 前缀，控制台「API Keys」页创建，明文只显示一次；可随时撤销（吊销即生效） |
-| 视频库 | TT 库：上传返回 `videoUrl`（公网，7 天有效，发布用）；TTS 库：上传返回 `fileId`（一次性消耗，发布/预审用） |
+| 视频库 | TT 库：上传返回 `videoUrl`（公网，7 天有效，发布用）；TTS 库：上传返回 `fileId`（一次性消耗，发布/预审用，`videoUrl` 恒为 null）。删除=软删（status=expired）：发布/预审立即拒绝，但记录仍留在列表/详情中（字段保留，审计留痕） |
 | 商品库 | TTS 账号下可挂车商品的实时拉取（店铺 + 橱窗），拿 `productId` 用于挂车 |
-| 发布记录 | 每次发布的只读快照（`publish records`）；最新状态用 `publish status` 实时刷新 |
+| 发布记录 | 每次发布的只读快照（`publish records`）；最新状态用 `publish status` 实时刷新。字段口径：`videoId`=平台视频库 ID；官方句柄在 `shareId`（TT=share_id，TTS=官方 video_id，查 status 传它） |
 
 ## 账号 ID 口径（高频踩坑）
 
