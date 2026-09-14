@@ -1,6 +1,7 @@
 # vidgate CLI 命令参考
 
 全局 flag（可前可后）：`--json`（恒输出 envelope）/ `--token` / `--base-url` / `--timeout <ms>`。`--help` 仅命令词之前生效（`vidgate --help`）。
+参数值以 `-` 开头时（如实测 TT businessId `-000eHWs…`）空格/等号写法均可（CLI 自动规范化为 `--opt=value`）。
 凭据优先级：`--token` > `VIDGATE_API_TOKEN` 环境变量 > `~/.config/vidgate/config.json`。
 退出码：0 成功 / 1 本地 / 2 认证 / 3 业务拒绝 / 4 限流 / 5 上游 / 6 内部。
 命令面：稳定版 ≥ 1.4.0 全量可用（beta 通道自 0.0.2-beta 起同样全量）；以 `vidgate --help` 输出为准。
@@ -36,7 +37,7 @@
 | `vidgate videos upload <file>` | POST /v1/videos | file（positional） | `--library tt\|tts`（默认 tt）、`--account-id`（**library=tts 时必填**）。TTS 响应 `videoUrl` 恒为 null，以 code=0 判成功 |
 | `vidgate videos delete <id>` | DELETE /v1/videos/{id} | id | 软删=立即失效：发布/预审立即拒绝（2005）；记录仍留列表/详情（status=expired，字段保留），属预期 |
 | `vidgate publish tt` | POST /v1/publish/tiktok | `--video-url` `--account-id` | `--caption` `--brand-organic` `--branded-content` `--disable-comment` `--disable-duet` `--disable-stitch` `--thumbnail-offset <ms>` `--wait` |
-| `vidgate publish tts` | POST /v1/publish/tts | `--file-id` `--account-id` `--product-id` | `--product-title` `--title` `--cover-uri` `--cover-timestamp-ms` `--music-id` `--ai-generated` `--wait` |
+| `vidgate publish tts` | POST /v1/publish/tts | `--file-id` `--account-id` `--product-id` `--title`（**官方必填**，缺省官方报 3001） | `--product-title` `--cover-uri` `--cover-timestamp-ms` `--music-id` `--ai-generated` `--wait` |
 | `vidgate publish status --tt --share-id <id>` | GET /v1/publish/tiktok/status | --tt + shareId | 与 --tts 互斥 |
 | `vidgate publish status --tts --video-id <id>` | GET /v1/publish/tts/status | --tts + videoId（**官方 video_id**：publish tts 响应的 videoId，或 records 里的 shareId 字段；勿用 records 的 videoId——那是平台库 ID，必 1005） | 与 --tt 互斥 |
 | `vidgate publish records [--capability TT\|TTS] [--page <n>] [--page-size <n>]` | GET /v1/publish/records | — | 只读快照，不刷新状态。字段口径：`videoId`=平台视频库 ID（对 videos）；`shareId`=官方句柄（TT=share_id，TTS=video_id，查 status 用它） |

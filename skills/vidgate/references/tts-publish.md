@@ -100,7 +100,7 @@ vidgate music search --account-id <id> --keyword love --json
 | CLI flag | 官方字段 | 说明 |
 |---|---|---|
 | `--file-id` | video_info.file_id | 一次性消耗 |
-| `--title` | video_info.title | 视频文案（支持 #话题 @提及） |
+| `--title` | video_info.title | **官方必填**（缺省官方报 3001「Title of VideoInfo is a required field」，CLI 本地拦截）；视频文案（支持 #话题 @提及） |
 | `--ai-generated` | video_info.is_ai_generated | AI 生成内容必须传 true（带 AI 标识） |
 | `--cover-uri` | video_info.cover_uri | photos upload 返回 |
 | `--cover-timestamp-ms` | video_info.cover_timestamp_ms | 封面帧毫秒 |

@@ -97,6 +97,7 @@ TT 视频数据回收（views/likes/comments/shares…）
 TTS 挂车发布（对齐官方 Post Shoppable Video v202607）
 
 - 必填 body：fileId、accountId、productId
+- 条件必填：title（视频标题/文案（caption），官方必填（缺省官方报 3001「Title of VideoInfo is a required field」；网关不预检、缺省时透传官方报错，CLI 已本地必填拦截）；支持 #话题 和 @提及；长度与内容由官方校验）
 - ⚠ 入参全部为官方口径：fileId 是官方 Upload Video File 返回的 file_id（即 POST /v1/videos library=tts 响应的 fileId），一次性消耗——调用本接口即消耗，失败也不可复用，重试需重新上传获得新 fileId
 - ⚠ 平台只校验视频归属与账号绑定（查无/未绑定 → 1005）；内容类规则（锚点文案、caption 长度、fileId 是否已消耗等）全部由官方校验，违规透传官方报错（3001，message 含官方原因）
 - ⚠ 无需预审凭证：建议先调 POST /v1/publish/tts/precheck 自检（violation FAIL 不建议发布），但是否发布由你自行判断
