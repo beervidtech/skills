@@ -3,7 +3,7 @@ name: vidgate
 description: 通过 vidgate CLI 发布视频到 TikTok / TikTok Shop（挂车带货）、查询坐席与商品、跟踪发布状态、TTS 预审。Use when the user wants to upload or publish videos to TikTok / TikTok Shop, query seats or shoppable products, run TTS precheck, upload covers, search music, or check publish status via the vidgate API platform.
 metadata:
   author: beervid
-  version: "0.2"
+  version: "0.3.1"
 ---
 
 # vidgate 视频发布
@@ -19,7 +19,7 @@ vidgate version                                # 核对能力版本
 ```
 
 - 无凭据 → 提示用户提供 API Token（控制台「API Keys」页创建）：`vidgate auth login --token <t>`，或 `export VIDGATE_API_TOKEN=vg_live_...`。
-- **能力版本门**：0.0.x 仅只读命令（auth / seats / videos list,get / products query）；写链路（upload / publish / precheck / photos / music）需 CLI **≥ 1.4.0**。版本不够就提示用户 `npm update -g @vidgate/cli`。
+- **能力版本门**：0.0.x 仅只读命令（auth / seats / videos list,get / products query）；写链路（videos upload / videos delete / publish / precheck / photos / music）需 CLI **≥ 1.4.0**。版本不够就提示用户 `npm update -g @vidgate/cli`。
 
 ## 1. 凭据纪律（安全红线）
 
@@ -81,4 +81,4 @@ vidgate publish tts --file-id <f> --account-id <id> --product-id <p> --product-t
 
 ## 7. 无 CLI 降级
 
-用户拒绝安装 CLI 时：按控制台文档站「API 参考」页直连 HTTP（需用户登录控制台查看）；envelope 与错误码语义同上。
+用户拒绝安装 CLI 时：优先按本 skill 包内 `references/endpoints.md` 直连 HTTP（端点/参数/错误码速查，与 openapi spec 同源，skill 单独安装也自洽）；envelope 与错误码语义同上（`code === 0` 判成败）。控制台文档站「API 参考」页（/docs，需登录）可作补充参考。
