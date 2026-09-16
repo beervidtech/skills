@@ -78,7 +78,7 @@ seats list（拿 creatorUserOpenId）→ videos upload --library tts（拿一次
 **封面**：
 
 ```bash
-vidgate photos upload cover.jpg --account-id <id> --json   # → photoUri
+haina photos upload cover.jpg --account-id <id> --json   # → photoUri
 ```
 
 - 图片要求：JPG/JPEG/PNG/WEBP/HEIC/BMP，≤10MB，宽高比 9:16~16:9。
@@ -87,7 +87,7 @@ vidgate photos upload cover.jpg --account-id <id> --json   # → photoUri
 **音乐**：
 
 ```bash
-vidgate music search --account-id <id> --keyword love --json
+haina music search --account-id <id> --keyword love --json
 # 翻页：第 2 页起必须同时带 --search-id（首页响应返回）和 --page-token
 ```
 

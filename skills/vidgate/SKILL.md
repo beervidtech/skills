@@ -1,25 +1,26 @@
 ---
 name: vidgate
-description: 通过 vidgate CLI 发布视频到 TikTok / TikTok Shop（挂车带货）、查询坐席与商品、跟踪发布状态、TTS 预审。Use when the user wants to upload or publish videos to TikTok / TikTok Shop, query seats or shoppable products, run TTS precheck, upload covers, search music, or check publish status via the vidgate API platform.
+description: 通过 HAiNA CLI 发布视频到 TikTok / TikTok Shop（挂车带货）、查询坐席与商品、跟踪发布状态、TTS 预审。Use when the user wants to upload or publish videos to TikTok / TikTok Shop, query seats or shoppable products, run TTS precheck, upload covers, search music, or check publish status via the HAiNA API platform.
 metadata:
   author: beervid
-  version: "0.4.0"
+  version: "0.5.0"
 ---
 
-# vidgate 视频发布
+# HAiNA 视频发布
 
-vidgate 是 TikTok / TikTok Shop 视频发布 API 平台。本 skill 教你用官方 CLI（`vidgate`）完成发布全流程。
+HAiNA 是 TikTok / TikTok Shop 视频发布 API 平台。本 skill 教你用官方 CLI（HAiNA CLI，`haina` 命令）完成发布全流程。
 
 ## 0. 前置自举（每次会话先检查）
 
 ```bash
-which vidgate || npm install -g @vidgate/cli   # 要求 Node ≥22
-vidgate auth status                            # 退出码非 0 = 未配置凭据
-vidgate version                                # 核对能力版本
+which haina || npm install -g @hainaio/cli   # 要求 Node ≥22
+haina auth status                            # 退出码非 0 = 未配置凭据
+haina version                                # 核对能力版本
 ```
 
-- 无凭据 → 提示用户提供 API Token（控制台「API Keys」页创建）：`vidgate auth login --token <t>`，或 `export VIDGATE_API_TOKEN=vg_live_...`。
-- **能力版本门**：稳定版 **≥ 1.4.0** 具备全部命令（只读 + 写链路 + `skill install`）；beta 通道自 `0.0.2-beta` 起同样全量。拿不准就以 `vidgate --help` 输出为准（含 `videos upload` 即具备写能力）；版本过旧就提示用户 `npm update -g @vidgate/cli`。
+- 旧安装的命令名是 `vidgate`（@vidgate/cli），与 `haina` 完全等价——看到用户机器上只有 vidgate 时照用不误，但新安装一律 `@hainaio/cli`。
+- 无凭据 → 提示用户提供 API Token（控制台「API Keys」页创建）：`haina auth login --token <t>`，或 `export VIDGATE_API_TOKEN=vg_live_...`。
+- **能力版本门**：稳定版 **≥ 1.4.0** 具备全部命令（只读 + 写链路 + `skill install`）；beta 通道自 `0.0.2-beta` 起同样全量。拿不准就以 `haina --help` 输出为准（含 `videos upload` 即具备写能力）；版本过旧就提示用户 `npm update -g @hainaio/cli`。
 
 ## 1. 凭据纪律（安全红线）
 
@@ -34,7 +35,7 @@ vidgate version                                # 核对能力版本
 
 ## 3. 平台心智模型（先读，再动手）
 
-- **坐席（Seat）**：1 个 TikTok 账号 = 1 坐席；一个坐席可绑两种能力。**TT 能力的账号 ID 是 businessId；TTS 能力是 creatorUserOpenId**——两个 ID 都从 `vidgate seats list --json` 拿，别混用。
+- **坐席（Seat）**：1 个 TikTok 账号 = 1 坐席；一个坐席可绑两种能力。**TT 能力的账号 ID 是 businessId；TTS 能力是 creatorUserOpenId**——两个 ID 都从 `haina seats list --json` 拿，别混用。
 - **视频库分两库**：TT 库上传返回 `videoUrl`（公网 URL，**7 天有效**，发布用）；TTS 库上传返回 `fileId`（**一次性消耗**，发布/预审用）。
 - **账号健康**：坐席 `authStatus=expired` 说明授权失效 → 引导用户去控制台坐席页重新绑定，不要反复重试发布。
 
@@ -43,19 +44,19 @@ vidgate version                                # 核对能力版本
 ### TT 发布（TikTok 普通视频）
 
 ```bash
-vidgate seats list --json                    # 拿 TT 账号 businessId
-vidgate videos upload <file> --json          # → videoUrl（7 天有效）
-vidgate publish tt --video-url <url> --account-id <id> --caption "文案 #话题" --wait --json
+haina seats list --json                    # 拿 TT 账号 businessId
+haina videos upload <file> --json          # → videoUrl（7 天有效）
+haina publish tt --video-url <url> --account-id <id> --caption "文案 #话题" --wait --json
 ```
 
 ### TTS 挂车（TikTok Shop 带货视频）
 
 ```bash
-vidgate seats list --json                                        # 拿 TTS 账号 creatorUserOpenId
-vidgate videos upload <f> --library tts --account-id <id> --json # → fileId（一次性！）
-vidgate products query --account-id <id> --json                  # 拿可挂车 productId
-vidgate precheck submit --file-id <f> --account-id <id> --product-id <p> --product-title <锚点> --wait --json  # 可选但建议
-vidgate publish tts --file-id <f> --account-id <id> --product-id <p> --product-title <锚点> --wait --json
+haina seats list --json                                        # 拿 TTS 账号 creatorUserOpenId
+haina videos upload <f> --library tts --account-id <id> --json # → fileId（一次性！）
+haina products query --account-id <id> --json                  # 拿可挂车 productId
+haina precheck submit --file-id <f> --account-id <id> --product-id <p> --product-title <锚点> --wait --json  # 可选但建议
+haina publish tts --file-id <f> --account-id <id> --product-id <p> --product-title <锚点> --wait --json
 ```
 
 **深入细节按需读 references/**：
@@ -81,4 +82,4 @@ vidgate publish tts --file-id <f> --account-id <id> --product-id <p> --product-t
 
 ## 7. 无 CLI 降级
 
-用户拒绝安装 CLI 时：优先按本 skill 包内 `references/endpoints.md` 直连 HTTP（端点/参数/错误码速查，与 openapi spec 同源，skill 单独安装也自洽）；envelope 与错误码语义同上（`code === 0` 判成败）。控制台文档站「API 参考」页（/docs，需登录）可作补充参考。
+用户拒绝安装 CLI 时：优先按本 skill 包内 `references/endpoints.md` 直连 HTTP（端点/参数/错误码速查，与 openapi spec 同源，skill 单独安装也自洽）；envelope 与错误码语义同上（`code === 0` 判成败）。控制台文档站「API 参考」页（/docs，免登录）可作补充参考。

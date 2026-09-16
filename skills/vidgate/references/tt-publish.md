@@ -49,7 +49,7 @@ seats list（拿 businessId）→ videos upload（拿 videoUrl，7 天有效）�
 ## 数据回收（stats）
 
 ```bash
-vidgate publish stats <postId> --json
+haina publish stats <postId> --json
 ```
 
 返回 `videoViews/likes/comments/shares/reach` 等（`stats` 可得性取决于授权 scope；无数据时 stats 为 null）。itemId 即 postId；查不到说明视频未发布成功或不属于你（1005）。

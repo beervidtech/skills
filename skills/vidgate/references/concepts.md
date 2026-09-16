@@ -14,8 +14,8 @@
 
 | 能力 | ID 类型 | 获取 |
 |---|---|---|
-| TT 发布 | `businessId` | `vidgate seats list --json` 坐席 TT 绑定字段 |
-| TTS 挂车/预审/商品/素材 | `creatorUserOpenId` | `vidgate seats list --json` 坐席 TTS 绑定字段 |
+| TT 发布 | `businessId` | `haina seats list --json` 坐席 TT 绑定字段 |
+| TTS 挂车/预审/商品/素材 | `creatorUserOpenId` | `haina seats list --json` 坐席 TTS 绑定字段 |
 | （seats 响应字段名） | `capabilityAccountId` | seats 响应里实际字段是 `bindings[].capabilityAccountId`（`capability=TT` 行为 businessId，`TTS` 行为 creatorUserOpenId） |
 
 同一个 TikTok 账号两侧 ID 不同，**不可混用**；用错会得到 1005。
