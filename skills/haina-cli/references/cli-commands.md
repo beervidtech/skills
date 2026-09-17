@@ -19,7 +19,7 @@
 
 | 命令 | 说明 |
 |---|---|
-| `haina skill install [--global] [--agent <name>...] [--yes]` | 把本 skill 装进本机 AI agent 的技能目录。默认项目级（按已存在的 agent 目录探测：.claude/.agents/…，全无则兜底 `.agents/skills/vidgate`）；`--global` 装用户级。`--agent` 可选值：claude-code / opencode / codex / cursor / universal（可多个）。目标已存在时：TTY 询问（缺省不覆盖），非 TTY 或 `--yes` 直接覆盖。注意：只写上述探测表内的目录，使用自有 skills 目录的 agent（如 Hermes `~/.hermes/skills`）需安装后手动同步/软链 |
+| `haina skill install [--global] [--agent <name>...] [--yes]` | 把本 skill 装进本机 AI agent 的技能目录。默认项目级（按已存在的 agent 目录探测：.claude/.agents/…，全无则兜底 `.agents/skills/haina-cli`）；`--global` 装用户级。`--agent` 可选值：claude-code / opencode / codex / cursor / universal（可多个）。目标已存在时：TTY 询问（缺省不覆盖），非 TTY 或 `--yes` 直接覆盖。注意：只写上述探测表内的目录，使用自有 skills 目录的 agent（如 Hermes `~/.hermes/skills`）需安装后手动同步/软链 |
 
 ## 只读命令
 

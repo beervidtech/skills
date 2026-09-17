@@ -1,14 +1,14 @@
 ---
-name: vidgate
-description: 通过 HAiNA CLI 发布视频到 TikTok / TikTok Shop（挂车带货）、查询坐席与商品、跟踪发布状态、TTS 预审。Use when the user wants to upload or publish videos to TikTok / TikTok Shop, query seats or shoppable products, run TTS precheck, upload covers, search music, or check publish status via the HAiNA API platform.
+name: haina-cli
+description: 通过 HAiNA CLI 发布视频到 TikTok / TikTok Shop（挂车带货）、查询坐席与商品、跟踪发布状态、TTS 预审。Use when the user wants to upload or publish videos to TikTok / TikTok Shop, query seats or shoppable products, run TTS precheck, upload covers, search music, or check publish status via the HAiNA CLI API platform.
 metadata:
   author: beervid
-  version: "0.5.0"
+  version: "0.6.0"
 ---
 
-# HAiNA 视频发布
+# HAiNA CLI 视频发布
 
-HAiNA 是 TikTok / TikTok Shop 视频发布 API 平台。本 skill 教你用官方 CLI（HAiNA CLI，`haina` 命令）完成发布全流程。
+HAiNA CLI 是 TikTok / TikTok Shop 视频发布 API 平台。本 skill 教你用官方 CLI（HAiNA CLI，`haina` 命令）完成发布全流程。
 
 ## 0. 前置自举（每次会话先检查）
 
